@@ -62,7 +62,8 @@ download_release() {
   os=$(get_os)
 	url="$GH_REPO/releases/download/v${version}/templ_${os}_${arch}.tar.gz"
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -C - "$url" | tar xvz - -C templdir || fail "Could not download $url"
+	mkdir templdir
+	curl "${curl_opts[@]}" -C - "$url" | tar -zx -C templdir || fail "Could not download $url"
 	mv templdir/templ $filename
 	rm -rf templdir
 }
