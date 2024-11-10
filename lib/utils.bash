@@ -61,11 +61,11 @@ download_release() {
 	arch=$(get_arch)
 	os=$(get_os)
 	tmpdir=$(mktemp -d)
-	url="$GH_REPO/releases/download/v${version}/templ_${os}_${arch}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${os}_${arch}.tar.gz"
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -C - "$url" | tar xvz -C "$tmpdir" templ || fail "Could not download $url"
+	curl "${curl_opts[@]}" -C - "$url" | tar xvz -C "$tmpdir" ${TOOL_NAME} || fail "Could not download $url"
 	ls -l "$tmpdir"
-	mv "$tmpdir/templ" "$filename"
+	mv "$tmpdir/${TOOL_NAME}" "$filename"
 	rm -r "$tmpdir"
 }
 
@@ -73,18 +73,17 @@ install_version() {
 	local install_type="$1"
 	local version="$2"
 	local install_path="${3%/bin}/bin"
-	echo "HERE!\nInstall type: $install_type\nVersion: $version\nInstall path: $install_path"
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
 
 	(
-		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
-
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+
+		mkdir -p "$install_path"
+		cp -r "$ASDF_DOWNLOAD_PATH/${tool_cmd}-${version}" "$install_path/$tool_cmd"
 
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
