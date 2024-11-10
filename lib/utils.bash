@@ -64,6 +64,7 @@ download_release() {
 	url="$GH_REPO/releases/download/v${version}/templ_${os}_${arch}.tar.gz"
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -C - "$url" | tar xvz -C "$tmpdir" templ || fail "Could not download $url"
+	ls -l "$tmpdir"
 	mv "$tmpdir/templ" "$filename"
 	rm -r "$tmpdir"
 }
