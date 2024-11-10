@@ -64,6 +64,11 @@ download_release() {
 	echo "* Downloading $TOOL_NAME release $version..."
 	mkdir templdir
 	curl "${curl_opts[@]}" -C - "$url" | tar -zx -C $filename || fail "Could not download $url"
+	mv templdir/templ $filename
+	echo "filename: $filename"
+	ls
+
+	rm -rf templdir
 }
 
 install_version() {
