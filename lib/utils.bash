@@ -12,23 +12,23 @@ fail() {
 }
 
 get_os() {
-  os=$(uname -s)
-  case $os in
-  Darwin) os="Darwin" ;;
-  Linux) os="Linux" ;;
-  *) fail "The os (${os}) is not supported by this installation script." ;;
-  esac
-  echo "$os"
+	os=$(uname -s)
+	case $os in
+	Darwin) os="Darwin" ;;
+	Linux) os="Linux" ;;
+	*) fail "The os (${os}) is not supported by this installation script." ;;
+	esac
+	echo "$os"
 }
 
 get_arch() {
-  arch=$(uname -m)
-  case $arch in
-  x86_64) arch="x86_64" ;;
-  arm64) arch="arm64" ;;
-  *) fail "The architecture (${arch}) is not supported by this installation script." ;;
-  esac
-  echo "$arch"
+	arch=$(uname -m)
+	case $arch in
+	x86_64) arch="x86_64" ;;
+	arm64) arch="arm64" ;;
+	*) fail "The architecture (${arch}) is not supported by this installation script." ;;
+	esac
+	echo "$arch"
 }
 
 curl_opts=(-fsSL)
@@ -59,11 +59,11 @@ download_release() {
 	filename="$2"
 
 	arch=$(get_arch)
-  os=$(get_os)
+	os=$(get_os)
 	url="$GH_REPO/releases/download/v${version}/templ_${os}_${arch}.tar.gz"
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -C - "$url" | tar xvz templ || fail "Could not download $url"
-	mv templ $filename
+	mv templ "$filename"
 }
 
 install_version() {
@@ -81,7 +81,7 @@ install_version() {
 
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-		
+
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
 		echo "$TOOL_NAME $version installation was successful!"
